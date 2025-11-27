@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Copy of Copy of MAXFRA Academy OS",
+  "description": "Maxfra Academy OS Protoype",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
