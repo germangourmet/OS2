@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import type { FSNode, FileNode, SessionInfo } from '../types';
 import { MaxfraLogoIcon } from './icons';
@@ -9,7 +10,7 @@ interface LoginScreenProps {
 
 const translations = {
   en: {
-    title: 'Maxfra Academy OS',
+    title: 'Good Talent OS System 1.0',
     usernameLabel: 'Username',
     passwordLabel: 'Password',
     signInButton: 'Sign In',
@@ -18,7 +19,7 @@ const translations = {
     errorSystem: 'A system error occurred. Please try again.'
   },
   es: {
-    title: 'Maxfra Academy OS',
+    title: 'Good Talent OS System 1.0',
     usernameLabel: 'Usuario',
     passwordLabel: 'Contraseña',
     signInButton: 'Iniciar Sesión',
@@ -92,7 +93,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess, fs }) => {
             </button>
         </div>
         
-        {MaxfraLogoIcon("w-24 h-24 mx-auto mb-6")}
+        <img src="/logo.svg" alt="Good Talent Logo" className="w-48 h-auto mx-auto mb-6" />
         <h1 className="text-2xl font-semibold text-center mb-6">{translations[language].title}</h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <div>

@@ -1,5 +1,4 @@
 
-
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import { FolderIcon, FileIcon, ChevronLeftIcon, ChevronRightIcon, ReloadIcon, HomeIcon, PlusIcon, CloseIcon, MaxfraWordIcon, MaxfraExcelIcon, MaxfraOutlookIcon, TrashIcon, WhatsAppIcon, SearchIcon, ShareIcon, UploadIcon, GenerateImageIcon, POSIcon, BarcodeIcon, PrintIcon, PencilIcon, PlusCircleIcon, MinusCircleIcon, ExpandIcon, ContractIcon, InventoryIcon } from '../components/icons';
@@ -11,8 +10,7 @@ import { useDebounce } from '../utils/hooks';
 export { CheckInApp } from './CheckInApp';
 export { QuickRepliesApp } from './QuickRepliesApp';
 export { WhiteboardApp } from './WhiteboardApp';
-export { StudentDatabaseApp } from './StudentDatabaseApp'; 
-export { POSApp } from './StudentDatabaseApp'; // POSApp is also defined in StudentDatabaseApp.tsx after refactor
+export { StudentDatabaseApp, POSApp } from './StudentDatabaseApp'; 
 
 
 // --- Filesystem Utilities ---

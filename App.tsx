@@ -317,11 +317,10 @@ const App: React.FC = () => {
         <>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none">
             <div className="flex items-center gap-4">
-                {WindowsLogoIcon("h-24 w-24")}
-                {MaxfraLogoIcon(`h-32 w-32 opacity-90 ${backgroundId === 'matrix' ? 'invert' : ''}`)}
+                <img src="/logo.svg" alt="Good Talent Logo" className="h-32 w-auto opacity-90" />
             </div>
             <h1 className="text-4xl font-light text-white mt-6 [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)]">
-                Maxfra Academy OS
+                Good Talent OS System 1.0
             </h1>
           </div>
           <Desktop apps={APPS} openApp={openApp} />
