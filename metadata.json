@@ -1,6 +1,6 @@
 {
-  "name": "Copy of Copy of Copy of MAXFRA Academy OS",
-  "description": "Maxfra Academy OS Protoype",
+  "name": "Recurier OS",
+  "description": "Recurier OS prototype - recruitment & applicant tracking shell",
   "requestFramePermissions": [
     "microphone"
   ]

@@ -10,7 +10,7 @@ interface LoginScreenProps {
 
 const translations = {
   en: {
-    title: 'Good Talent OS System 1.0',
+    title: 'Recurier OS 1.0',
     usernameLabel: 'Username',
     passwordLabel: 'Password',
     signInButton: 'Sign In',
@@ -19,7 +19,7 @@ const translations = {
     errorSystem: 'A system error occurred. Please try again.'
   },
   es: {
-    title: 'Good Talent OS System 1.0',
+    title: 'Recurier OS 1.0',
     usernameLabel: 'Usuario',
     passwordLabel: 'Contraseña',
     signInButton: 'Iniciar Sesión',

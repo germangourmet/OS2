@@ -320,7 +320,7 @@ const App: React.FC = () => {
                 <img src="/logo.svg" alt="Good Talent Logo" className="h-32 w-auto opacity-90" />
             </div>
             <h1 className="text-4xl font-light text-white mt-6 [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)]">
-                Good Talent OS System 1.0
+              Recurier OS 1.0
             </h1>
           </div>
           <Desktop apps={APPS} openApp={openApp} />
