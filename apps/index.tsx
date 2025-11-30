@@ -4,13 +4,17 @@ import { GoogleGenAI } from '@google/genai';
 import { FolderIcon, FileIcon, ChevronLeftIcon, ChevronRightIcon, ReloadIcon, HomeIcon, PlusIcon, CloseIcon, MaxfraWordIcon, MaxfraExcelIcon, MaxfraOutlookIcon, TrashIcon, WhatsAppIcon, SearchIcon, ShareIcon, UploadIcon, GenerateImageIcon, POSIcon, BarcodeIcon, PrintIcon, PencilIcon, PlusCircleIcon, MinusCircleIcon, ExpandIcon, ContractIcon, InventoryIcon } from '../components/icons';
 import type { AppProps, FSNode, FileNode, DirectoryNode, FileData, Student, CheckInLog, Transaction, Appointment, AttendanceRecord, StudentDocument, LibraryResource, Product, BusinessInfo, Sale, SaleItem } from '../types';
 import { MAXFRA_LOGO_B64, LIBRARY_IMAGES } from '../constants';
-import { useDebounce } from '../utils/hooks';
+import { useDebounce } from "../utils/hooks.ts";
 
 // Re-exports
 export { CheckInApp } from './CheckInApp';
 export { QuickRepliesApp } from './QuickRepliesApp';
 export { WhiteboardApp } from './WhiteboardApp';
 export { StudentDatabaseApp, POSApp } from './StudentDatabaseApp'; 
+export { CandidateDBApp } from './CandidateDBApp';
+export { JobBoardApp } from './JobBoardApp';
+export { SchedulerApp } from './SchedulerApp';
+export { MessagingApp } from './MessagingApp';
 
 
 // --- Filesystem Utilities ---
