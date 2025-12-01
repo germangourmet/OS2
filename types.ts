@@ -64,142 +64,176 @@ export interface SessionInfo {
 }
 
 
-// --- New Student Data Sub-types ---
-export interface AttendanceRecord {
+// --- Candidate Data Sub-types (AI Recruiting) ---
+export interface CandidateExperience {
+    company: string;
+    position: string;
+    duration: string;
+    description?: string;
+}
+
+export interface CandidateSkill {
+    name: string;
+    level: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
+    yearsOfExperience?: number;
+}
+
+export interface CandidateEducation {
+    institution: string;
+    degree: string;
+    field: string;
+    graduationYear?: number;
+}
+
+export interface InterviewRecord {
     id: string;
     date: string;
-    course: string;
-    topic: string;
-    status: 'Present' | 'Absent' | 'Excused';
+    interviewerName: string;
+    position: string;
+    status: 'Scheduled' | 'Completed' | 'No-Show';
     notes?: string;
+    rating?: number; // 1-5
 }
 
-export interface StudentDocument {
+export interface CandidateDocument {
     id: string;
     name: string;
-    type: string;
+    type: 'CV' | 'Portfolio' | 'Certification' | 'Other';
     dataUrl: string; // base64
+    uploadDate: string;
 }
 
-export interface LibraryResource {
+export interface CandidateProfileImage {
+    dataUrl: string; // base64
+    uploadDate: string;
+    filename: string;
+}
+
+export interface AIResearchRecord {
     id: string;
-    title: string;
-    assignedDate: string;
+    date: string;
+    topic: string;
+    findings: string;
+    sources?: string[];
+    savedByUser: boolean;
 }
 
-// --- Student Database Type ---
+// --- Candidate Database Type (replacing Student) ---
 export interface Student {
   id: string;
-  // Course Info
-  course?: string;
-  courseDuration?: string;
-  totalClasses?: string;
-  startDate?: string;
-  endDate?: string;
-  registrationDate?: string;
-  registrationCost?: string;
-  totalCost?: string;
-  monthlyPayment?: string;
-  cashPayment?: string;
-  downPayment?: string;
-  paymentDate?: string;
+  
   // Personal Info
   firstName: string;
   paternalLastName: string;
-  maternalLastName: string;
+  maternalLastName?: string;
+  email: string;
+  mobilePhone: string;
   dob?: string;
   nationality?: string;
-  sex?: string;
-  covidVaccine?: string;
-  curp?: string;
-  // Address
-  addressStreet?: string;
-  addressColonia?: string;
-  addressDelegacion?: string;
-  addressCp?: string;
-  // Contact & Professional
-  profession?: string;
-  educationLevel?: string;
-  homePhone?: string;
-  allergies?: string;
-  mobilePhone: string;
-  // Emergency Contact
-  emergencyContactName?: string;
-  emergencyContactPaternalLastName?: string;
-  emergencyContactMaternalLastName?: string;
-  emergencyContactDob?: string;
-  emergencyContactNationality?: string;
-  emergencyContactSex?: string;
-  emergencyContactRelationship?: string;
-  emergencyContactAddressStreet?: string;
-  emergencyContactAddressColonia?: string;
-  emergencyContactAddressDelegacion?: string;
-  emergencyContactAddressCp?: string;
-  emergencyContactHomePhone?: string;
-  emergencyContactMobilePhone?: string;
-  // Guardian (if minor)
-  guardianName?: string;
-  guardianPaternalLastName?: string;
-  guardianMaternalLastName?: string;
-  guardianDob?: string;
-  guardianNationality?: string;
-  guardianSex?: string;
-  guardianAddressStreet?: string;
-  guardianAddressColonia?: string;
-  guardianAddressDelegacion?: string;
-  guardianHomePhone?: string;
-  guardianMobilePhone?: string;
-  // New Tracking Fields
+  location?: string;
+  
+  // Profile Image
+  profileImage?: CandidateProfileImage;
+  
+  // Professional Info
+  currentPosition?: string;
+  currentCompany?: string;
+  yearsOfExperience?: number;
+  skillsProfile?: string; // e.g., "Python, Machine Learning, NLP"
+  specialization?: string; // e.g., "ML Engineer", "Data Scientist"
+  linkedinUrl?: string;
+  portfolioUrl?: string;
+  
+  // AI/Tech Skills
+  skills?: CandidateSkill[];
+  experience?: CandidateExperience[];
+  education?: CandidateEducation[];
+  
+  // Recruiting Pipeline
+  status?: 'New' | 'Screening' | 'Interview' | 'Offer' | 'Hired' | 'Rejected';
+  stage?: 'Applied' | 'Phone Screen' | 'Technical Interview' | 'Final Round' | 'Offer Stage' | 'Closed';
+  applicationDate?: string;
+  recruiterAssigned?: string;
+  
+  // Interview Data
+  interviews?: InterviewRecord[];
+  interviewNotes?: string;
+  offerStatus?: 'Pending' | 'Sent' | 'Accepted' | 'Declined';
+  salaryExpectation?: number;
+  
+  // Recruitment Tracking
+  sourceOfApplication?: 'LinkedIn' | 'Email' | 'Referral' | 'Job Board' | 'Other';
+  tags?: string[];
+  rating?: number; // 1-5 overall rating
+  documents?: CandidateDocument[];
+  
+  // AI Research & Notes
+  aiResearchNotes?: string;
+  aiResearchRecords?: AIResearchRecord[];
+  customNotes?: string;
+  
+  // Legacy school fields (kept for backward compatibility)
+  course?: string;
+  registrationDate?: string;
   paymentStatus?: 'Paid' | 'Pending' | 'Partial';
   diplomaStatus?: 'Available' | 'Issued' | 'Not Available';
-  // Signature
-  signature?: string; // base64 data URL
-  
-  // --- New Comprehensive Tracking ---
-  attendance?: AttendanceRecord[];
-  documents?: StudentDocument[];
-  libraryResources?: LibraryResource[];
-  diplomaFile?: {
-      name: string;
-      dataUrl: string;
-  };
-}
+  signature?: string;
+};
 
-// --- Check-in Log Type ---
-export interface CheckInLog {
-  id: string;
-  studentId: string;
-  checkInTime: string; // ISO 8601 format
-  signature: string; // base64 data URL
-  appointmentId?: string;
-}
-
-// --- Finance Calculator Type ---
-export interface Transaction {
-  id: string;
-  date: string; // ISO 8601 format
-  description: string;
-  amount: number;
-  type: 'income' | 'expense';
-  studentId?: string; // Optional: Link transaction to a student
-  studentName?: string; // Optional: For display purposes
-}
-
-// --- Appointment Book Type ---
+// --- Interview Scheduling Type (replacing Appointment) ---
 export interface Appointment {
   id: string;
-  location: 'Perisur' | 'Cd Brisas' | 'Polanco';
+  location: 'Remote' | 'Office' | 'Hybrid';
   date: string; // "YYYY-MM-DD"
   time: string; // "HH:MM"
-  studentId?: string;
-  studentName: string;
-  teacher: 'Fernando' | 'Maggi' | 'Rosi';
-  type: 'Course' | 'Special';
-  details: string; // Course or Special name
-  attendance?: 'Pending' | 'Present' | 'Absent';
+  candidateId?: string;
+  candidateName: string;
+  candidateEmail?: string;
+  recruiter: string;
+  position: string;
+  interviewType: 'Phone Screen' | 'Technical' | 'HR' | 'Final Round';
+  status?: 'Scheduled' | 'Completed' | 'No-Show' | 'Cancelled';
   notes?: string;
-  signature?: string; // Add this line
-  learningLog?: string; // Add this for the learning log feature in AppointmentDetailModal
+  feedback?: string;
+  rating?: number; // 1-5
+  signature?: string; // base64 data URL
+}
+
+// --- Job Opening Type ---
+export interface JobOpening {
+  id: string;
+  title: string;
+  description: string;
+  specialization: string; // e.g., "ML Engineer", "Data Scientist", "AI Researcher"
+  level: 'Junior' | 'Mid' | 'Senior' | 'Lead';
+  location: string;
+  salaryRange?: { min: number; max: number };
+  requiredSkills: string[];
+  preferredSkills?: string[];
+  yearsOfExperience?: number;
+  postedDate: string;
+  deadline?: string;
+  status: 'Open' | 'Closed' | 'On Hold';
+  applicantCount?: number;
+  clientId?: string;
+  clientName?: string;
+}
+
+// --- Client/Company Type (replacing BusinessInfo structure) ---
+export interface ClientCompany {
+  id: string;
+  companyName: string;
+  industry?: string;
+  location?: string;
+  website?: string;
+  email: string;
+  phone: string;
+  contactPerson?: string;
+  contactTitle?: string;
+  openPositions?: number;
+  activeJobs?: string[]; // Job IDs
+  placementsCount?: number;
+  notes?: string;
 }
 
 // --- Quick Replies Type ---

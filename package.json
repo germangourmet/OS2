@@ -1,7 +1,7 @@
 {
-  "name": "copy-of-copy-of-copy-of-maxfra-academy-os",
+  "name": "ai-recruiter-os",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google/genai": "^1.30.0",
+    "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react": "^19.2.0"
+    "vite-plugin-svgr": "^4.5.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

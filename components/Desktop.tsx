@@ -9,6 +9,13 @@ interface DesktopProps {
 
 // Define the desired layout for the desktop icons, grouped into categories.
 const DESKTOP_LAYOUT: Record<string, string[]> = {
+  "Recruiting Management": [
+    'candidateDb',
+    'jobBoard',
+    'scheduler',
+    'liveMeeting',
+    'messaging',
+  ],
   "Academy Management": [
     'studentDatabase',
     'calendar',

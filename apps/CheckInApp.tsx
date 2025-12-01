@@ -49,9 +49,9 @@ const saveFileToFS = (root: FSNode, path: string[], fileName: string, content: s
 
 // --- Constant File Paths ---
 const SYSTEM_DIR_PATH = ['system'];
-const STUDENTS_FILE_NAME = 'maxfra-students.json';
-const APPOINTMENTS_FILE_NAME = 'maxfra-appointments.json';
-const CHECK_IN_LOG_FILE_NAME = 'maxfra-check-in-log.json';
+const CANDIDATES_FILE_NAME = 'candidates.json';
+const INTERVIEWS_FILE_NAME = 'interviews.json';
+const CHECK_IN_LOG_FILE_NAME = 'check-in-log.json';
 
 
 // --- Type declarations for Web Speech API ---
@@ -199,21 +199,21 @@ export const CheckInApp: React.FC<Partial<AppProps>> = ({ fs, setFs }) => {
         if (!fs) return;
         const dir = findNodeByPath(fs, SYSTEM_DIR_PATH);
         
-        const studentsFile = dir?.children.find(f => f.name === STUDENTS_FILE_NAME && f.type === 'file') as FileNode | undefined;
-        if (studentsFile) {
+        const candidatesFile = dir?.children.find(f => f.name === CANDIDATES_FILE_NAME && f.type === 'file') as FileNode | undefined;
+        if (candidatesFile) {
             try { 
-                const loadedStudents = JSON.parse(studentsFile.content);
-                if (Array.isArray(loadedStudents)) {
-                    setStudents(loadedStudents);
+                const loadedCandidates = JSON.parse(candidatesFile.content);
+                if (Array.isArray(loadedCandidates)) {
+                    setStudents(loadedCandidates);
                 }
             } 
-            catch { console.error("Failed to parse students file"); }
+            catch { console.error("Failed to parse candidates file"); }
         }
         
-        const appointmentsFile = dir?.children.find(f => f.name === APPOINTMENTS_FILE_NAME && f.type === 'file') as FileNode | undefined;
-        if (appointmentsFile) {
-            try { setAppointments(JSON.parse(appointmentsFile.content)); }
-            catch { console.error("Failed to parse appointments file"); }
+        const interviewsFile = dir?.children.find(f => f.name === INTERVIEWS_FILE_NAME && f.type === 'file') as FileNode | undefined;
+        if (interviewsFile) {
+            try { setAppointments(JSON.parse(interviewsFile.content)); }
+            catch { console.error("Failed to parse interviews file"); }
         }
 
         const checkInLogFile = dir?.children.find(f => f.name === CHECK_IN_LOG_FILE_NAME && f.type === 'file') as FileNode | undefined;
@@ -269,9 +269,9 @@ export const CheckInApp: React.FC<Partial<AppProps>> = ({ fs, setFs }) => {
     const getCurrentAppointment = (studentId: string): Appointment | undefined => {
         const today = new Date().toISOString().slice(0, 10);
         return appointments.find(app => 
-            app.studentId === studentId && 
+            app.candidateId === studentId && 
             app.date === today && 
-            app.attendance === 'Pending' // Only consider pending appointments
+            app.status === 'Scheduled' // Only consider scheduled interviews
         );
     };
 

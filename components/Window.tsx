@@ -117,7 +117,7 @@ const Window: React.FC<WindowProps> = ({ windowState: ws, onClose, onMinimize, o
           isMaximized={ws.isMaximized}
         />
       </header>
-      <main className="flex-grow bg-gray-200 relative overflow-hidden">
+      <main className="flex-grow bg-gray-200 relative overflow-visible">
         <AppContent 
             fs={fs}
             setFs={setFs}

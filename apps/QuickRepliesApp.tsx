@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import type { AppProps } from '../types';
 import { WhatsAppIcon, SearchIcon } from '../components/icons';
 import { QUICK_REPLIES_DATA } from '../constants';
 
@@ -24,7 +25,7 @@ const useCopyToClipboard = (): [boolean, (text: string) => void] => {
     return [isCopied, copy];
 };
 
-export const QuickRepliesApp: React.FC = () => {
+export const QuickRepliesApp: React.FC<Partial<AppProps>> = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState(QUICK_REPLIES_DATA[0]?.id || null);
     const [searchTerm, setSearchTerm] = useState('');
     const [isCopied, copyToClipboard] = useCopyToClipboard();

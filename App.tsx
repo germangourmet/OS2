@@ -1,5 +1,6 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import logoUrl from './logo.png?url';
 import Desktop from './components/Desktop';
 import Taskbar from './components/Taskbar';
 import StartMenu from './components/StartMenu';
@@ -13,12 +14,42 @@ const BACKGROUNDS = {
   default: `
 <svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-      <stop offset="0%" style="stop-color:#0078D7;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#002050;stop-opacity:1" />
+    <style>
+      @keyframes rotateNetwork { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      @keyframes floatNetwork { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+      #network { animation: rotateNetwork 45s linear infinite, floatNetwork 4s ease-in-out infinite; transform-origin: 960px 540px; }
+    </style>
+    <radialGradient id="aiGrad" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#0a1428;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#050a0f;stop-opacity:1" />
     </radialGradient>
+    <radialGradient id="networkGrad" cx="35%" cy="35%" r="50%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0099cc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#006699;stop-opacity:1" />
+    </radialGradient>
+    <filter id="aiGlow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <rect width="1920" height="1080" fill="url(#grad1)" />
+  <rect width="1920" height="1080" fill="url(#aiGrad)" />
+  <circle cx="150" cy="150" r="40" fill="#00d4ff" opacity="0.1"/>
+  <circle cx="1800" cy="200" r="25" fill="#00d4ff" opacity="0.08"/>
+  <circle cx="400" cy="900" r="30" fill="#0099cc" opacity="0.06"/>
+  <g id="network" filter="url(#aiGlow)">
+    <circle cx="960" cy="540" r="280" fill="url(#networkGrad)"/>
+    <path d="M 850 450 Q 880 470 920 480 T 1000 490" stroke="#00d4ff" stroke-width="2" fill="none" opacity="0.4"/>
+    <path d="M 900 550 Q 930 560 960 570 T 1030 580" stroke="#00d4ff" stroke-width="2" fill="none" opacity="0.4"/>
+    <path d="M 850 600 Q 900 610 950 620 T 1050 630" stroke="#0099cc" stroke-width="2" fill="none" opacity="0.3"/>
+    <circle cx="850" cy="480" r="8" fill="#00d4ff" opacity="0.6"/>
+    <circle cx="950" cy="500" r="8" fill="#0099cc" opacity="0.5"/>
+    <circle cx="1050" cy="550" r="8" fill="#00d4ff" opacity="0.4"/>
+    <circle cx="960" cy="540" r="275" fill="none" stroke="#00d4ff" stroke-width="2" opacity="0.15"/>
+  </g>
 </svg>`,
   sunset: `
 <svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
@@ -45,33 +76,34 @@ const BACKGROUNDS = {
 
 const getInitialFileSystem = (): DirectoryNode => {
     // Define types locally for seeding, to avoid complex imports
-    type StudentForSeed = Partial<Student> & {
+    type CandidateForSeed = Partial<Student> & {
       id: string;
       firstName: string;
       paternalLastName: string;
       mobilePhone: string;
+      email: string;
     };
     
-    type AppointmentForSeed = {
+    type InterviewForSeed = {
       id: string;
-      location: 'Perisur' | 'Cd Brisas' | 'Polanco';
+      location: 'Remote' | 'Office' | 'Hybrid';
       date: string;
       time: string;
-      studentId: string;
-      studentName?: string; // Add studentName for easier display in appointments
-      teacher: 'Fernando' | 'Maggi' | 'Rosi';
-      type: 'Course' | 'Special';
-      details: string; // Course or Special name
-      attendance?: 'Pending' | 'Present' | 'Absent';
+      candidateId: string;
+      candidateName?: string;
+      recruiter: string;
+      position: string;
+      interviewType: 'Phone Screen' | 'Technical' | 'HR' | 'Final Round';
+      status?: 'Scheduled' | 'Completed' | 'No-Show' | 'Cancelled';
       notes?: string;
     };
 
-    const sampleStudents: StudentForSeed[] = [
-        { id: 'student-1', firstName: 'Ana', paternalLastName: 'García', maternalLastName: 'Pérez', mobilePhone: '5512345678', paymentStatus: 'Paid', diplomaStatus: 'Issued' },
-        { id: 'student-2', firstName: 'Luis', paternalLastName: 'Martínez', maternalLastName: 'Rodríguez', mobilePhone: '5523456789', paymentStatus: 'Pending', diplomaStatus: 'Not Available' },
-        { id: 'student-3', firstName: 'Sofía', paternalLastName: 'Hernández', maternalLastName: 'López', mobilePhone: '5534567890', paymentStatus: 'Paid', diplomaStatus: 'Available' },
-        { id: 'student-4', firstName: 'Carlos', paternalLastName: 'Gómez', maternalLastName: 'González', mobilePhone: '5545678901', paymentStatus: 'Partial', diplomaStatus: 'Not Available' },
-        { id: 'student-5', firstName: 'María', paternalLastName: 'Torres', maternalLastName: 'Díaz', mobilePhone: '5556789012', paymentStatus: 'Paid', diplomaStatus: 'Issued' }
+    const sampleCandidates: CandidateForSeed[] = [
+        { id: 'candidate-1', firstName: 'Alex', paternalLastName: 'Chen', mobilePhone: '5512345678', email: 'alex.chen@email.com', currentPosition: 'ML Engineer', currentCompany: 'TechCorp', specialization: 'ML Engineer', status: 'Interview', stage: 'Technical Interview', rating: 4 },
+        { id: 'candidate-2', firstName: 'Sofia', paternalLastName: 'Romero', mobilePhone: '5523456789', email: 'sofia.romero@email.com', currentPosition: 'Data Scientist', currentCompany: 'DataFlow', specialization: 'Data Scientist', status: 'Screening', stage: 'Phone Screen', rating: 3 },
+        { id: 'candidate-3', firstName: 'James', paternalLastName: 'Wilson', mobilePhone: '5534567890', email: 'james.wilson@email.com', currentPosition: 'AI Researcher', currentCompany: 'ResearchLab', specialization: 'AI Researcher', status: 'Interview', stage: 'Final Round', rating: 5 },
+        { id: 'candidate-4', firstName: 'Maria', paternalLastName: 'García', mobilePhone: '5545678901', email: 'maria.garcia@email.com', currentPosition: 'NLP Engineer', currentCompany: 'LanguageTech', specialization: 'NLP Engineer', status: 'New', stage: 'Applied', rating: 3 },
+        { id: 'candidate-5', firstName: 'David', paternalLastName: 'Kim', mobilePhone: '5556789012', email: 'david.kim@email.com', currentPosition: 'Senior ML Engineer', currentCompany: 'AIInnovations', specialization: 'ML Engineer', status: 'Offer', stage: 'Offer Stage', rating: 5 }
     ];
 
     const today = new Date();
@@ -79,7 +111,7 @@ const getInitialFileSystem = (): DirectoryNode => {
     const getNextValidDay = (date: Date): Date => {
         let newDate = new Date(date);
         let dayOfWeek = newDate.getDay();
-        // AppointmentModal blocks Sunday (0) and Monday (1)
+        // Block Sunday (0) and Monday (1) for interviews
         while(dayOfWeek === 0 || dayOfWeek === 1) { 
             newDate.setDate(newDate.getDate() + 1);
             dayOfWeek = newDate.getDay();
@@ -99,70 +131,64 @@ const getInitialFileSystem = (): DirectoryNode => {
 
     const formatDate = (date: Date) => date.toISOString().slice(0, 10);
 
-    const sampleAppointments: AppointmentForSeed[] = [
-        { id: 'app-1', location: 'Perisur', date: formatDate(validToday), time: '10:00', studentId: 'student-1', studentName: 'Ana García', teacher: 'Fernando', type: 'Course', details: 'Microblading', attendance: 'Pending' },
-        { id: 'app-2', location: 'Perisur', date: formatDate(validToday), time: '10:00', studentId: 'student-2', studentName: 'Luis Martínez', teacher: 'Fernando', type: 'Course', details: 'Microblading', attendance: 'Pending' },
-        { id: 'app-3', location: 'Perisur', date: formatDate(validToday), time: '10:00', studentId: 'student-4', studentName: 'Carlos Gómez', teacher: 'Fernando', type: 'Course', details: 'Microblading', attendance: 'Pending' },
-        { id: 'app-4', location: 'Polanco', date: formatDate(validToday), time: '12:00', studentId: 'student-3', studentName: 'Sofía Hernández', teacher: 'Maggi', type: 'Course', details: 'Lash Lifting', attendance: 'Pending', notes: "Student asked to review the new serum." },
-        { id: 'app-5', location: 'Cd Brisas', date: formatDate(validToday), time: '15:00', studentId: 'student-5', studentName: 'María Torres', teacher: 'Rosi', type: 'Special', details: 'Information', attendance: 'Present' },
-        { id: 'app-6', location: 'Perisur', date: formatDate(validTomorrow), time: '10:00', studentId: 'student-5', studentName: 'María Torres', teacher: 'Fernando', type: 'Course', details: 'Eyelash Extensions', attendance: 'Pending' },
-        { id: 'app-7', location: 'Perisur', date: formatDate(validTomorrow), time: '10:00', studentId: 'student-1', studentName: 'Ana García', teacher: 'Fernando', type: 'Course', details: 'Eyelash Extensions', attendance: 'Pending' },
-        { id: 'app-8', location: 'Cd Brisas', date: formatDate(validTomorrow), time: '14:00', studentId: 'student-2', studentName: 'Luis Martínez', teacher: 'Rosi', type: 'Course', details: 'Hena', attendance: 'Pending' },
-        { id: 'app-9', location: 'Polanco', date: formatDate(validDayAfter), time: '16:00', studentId: 'student-3', studentName: 'Sofía Hernández', teacher: 'Maggi', type: 'Special', details: 'Pickup Diploma', attendance: 'Pending' },
-        { id: 'app-10', location: 'Perisur', date: formatDate(validDayAfter), time: '10:00', studentId: 'student-4', studentName: 'Carlos Gómez', teacher: 'Fernando', type: 'Course', details: 'Microblading', attendance: 'Pending' }
+    const sampleInterviews: InterviewForSeed[] = [
+        { id: 'interview-1', location: 'Remote', date: formatDate(validToday), time: '10:00', candidateId: 'candidate-1', candidateName: 'Alex Chen', recruiter: 'Sarah Johnson', position: 'ML Engineer', interviewType: 'Phone Screen', status: 'Scheduled' },
+        { id: 'interview-2', location: 'Remote', date: formatDate(validToday), time: '11:00', candidateId: 'candidate-2', candidateName: 'Sofia Romero', recruiter: 'John Smith', position: 'Data Scientist', interviewType: 'Phone Screen', status: 'Scheduled' },
+        { id: 'interview-3', location: 'Office', date: formatDate(validToday), time: '14:00', candidateId: 'candidate-3', candidateName: 'James Wilson', recruiter: 'Sarah Johnson', position: 'AI Researcher', interviewType: 'Final Round', status: 'Scheduled', notes: 'Candidate is very interested in the role.' },
+        { id: 'interview-4', location: 'Hybrid', date: formatDate(validTomorrow), time: '10:00', candidateId: 'candidate-4', candidateName: 'Maria García', recruiter: 'John Smith', position: 'NLP Engineer', interviewType: 'Technical', status: 'Scheduled' },
+        { id: 'interview-5', location: 'Remote', date: formatDate(validTomorrow), time: '15:00', candidateId: 'candidate-5', candidateName: 'David Kim', recruiter: 'Sarah Johnson', position: 'Senior ML Engineer', interviewType: 'HR', status: 'Scheduled' },
+        { id: 'interview-6', location: 'Office', date: formatDate(validDayAfter), time: '10:00', candidateId: 'candidate-1', candidateName: 'Alex Chen', recruiter: 'John Smith', position: 'ML Engineer', interviewType: 'Technical', status: 'Scheduled' },
+        { id: 'interview-7', location: 'Remote', date: formatDate(validDayAfter), time: '11:00', candidateId: 'candidate-2', candidateName: 'Sofia Romero', recruiter: 'Sarah Johnson', position: 'Data Scientist', interviewType: 'Technical', status: 'Scheduled' }
     ];
     
-    const studentsFileContent = JSON.stringify(sampleStudents, null, 2);
-    const appointmentsFileContent = JSON.stringify(sampleAppointments, null, 2);
+    const candidatesFileContent = JSON.stringify(sampleCandidates, null, 2);
+    const interviewsFileContent = JSON.stringify(sampleInterviews, null, 2);
     const usersFileContent = JSON.stringify([
         { "username": "admin", "password": "password123" },
-        { "username": "Fernando", "password": "Bailey88" }
+        { "username": "recruiter", "password": "recruit2024" }
     ], null, 2);
     
-    const posSettingsContent = JSON.stringify({
-        companyName: "Maxfra Academy",
-        rfc: "MAXF123456XYZ",
-        address: "Av. Insurgentes Sur 123, Roma Nte., 06700 Ciudad de México, CDMX",
-        phone: "+52 55 1234 5678",
-        website: "www.maxfra.com",
-        email: "contacto@maxfra.com",
+    const companyInfoContent = JSON.stringify({
+        companyName: "AI Talent Acquisition",
+        rfc: "AITA123456ABC",
+        address: "Av. Paseo de la Reforma 505, Cuauhtémoc, 06500 Ciudad de México, CDMX",
+        phone: "+52 55 5000 5000",
+        website: "www.airecruiter.com",
+        email: "contact@airecruiter.com",
         defaultIvaRate: 16,
         bankDetails: {
-            clabe: "123456789012345678",
-            bank: "BBVA México",
-            beneficiary: "Maxfra Academy S.A. de C.V."
+            clabe: "002010000123456789",
+            bank: "BANAMEX",
+            beneficiary: "AI Talent Acquisition S.A. de C.V."
         }
     } as BusinessInfo, null, 2);
 
-    const posInventoryContent = JSON.stringify([
-        { id: 'prod-1', sku: 'MBL-001', barcode: '7501001001', name: 'Microblading Kit Pro', description: 'Complete kit for professionals.', price: 2500, cost: 1200, stock: 15, ivaRate: 16, supplier: 'Pro Supplies', location: 'Shelf A1' },
-        { id: 'prod-2', sku: 'EYL-002', barcode: '7501001002', name: 'Eyelash Extensions Classic', description: 'Set of classic mink lashes.', price: 800, cost: 350, stock: 50, ivaRate: 16, supplier: 'Lash Co', location: 'Shelf B2' },
-        { id: 'prod-3', sku: 'HNA-003', barcode: '7501001003', name: 'Henna Pigment Brown', description: 'Organic henna pigment.', price: 350, cost: 150, stock: 30, ivaRate: 16, supplier: 'Natural Beauty', location: 'Drawer 3' },
-        { id: 'prod-4', sku: 'LFT-004', barcode: '7501001004', name: 'Lash Lifting Perm', description: 'Step 1 perm solution.', price: 450, cost: 200, stock: 25, ivaRate: 0, supplier: 'Lash Co', location: 'Shelf B3' },
-    ] as Product[], null, 2);
+    const jobOpeningsContent = JSON.stringify([
+        { id: 'job-1', title: 'ML Engineer', description: 'Looking for experienced ML Engineer with 3+ years', specialization: 'ML Engineer', level: 'Mid', location: 'Mexico City', salaryRange: { min: 120000, max: 180000 }, requiredSkills: ['Python', 'TensorFlow', 'Deep Learning'], status: 'Open', clientName: 'TechCorp', applicantCount: 12 },
+        { id: 'job-2', title: 'Senior Data Scientist', description: 'Lead data science initiatives for fintech startup', specialization: 'Data Scientist', level: 'Senior', location: 'Remote', salaryRange: { min: 150000, max: 220000 }, requiredSkills: ['Python', 'Statistical Analysis', 'Big Data'], status: 'Open', clientName: 'FinTech Innovations', applicantCount: 8 },
+        { id: 'job-3', title: 'AI Research Intern', description: 'Join our research team as an AI intern', specialization: 'AI Researcher', level: 'Junior', location: 'Mexico City', salaryRange: { min: 0, max: 30000 }, requiredSkills: ['Python', 'Machine Learning', 'Research'], status: 'Open', clientName: 'Research Lab', applicantCount: 45 }
+    ], null, 2);
 
     return {
         type: 'directory',
         name: 'root',
         children: [
             { type: 'directory', name: 'Documents', children: [
-                { type: 'file', name: 'resume.txt', content: 'This is a resume.' },
+                { type: 'file', name: 'company-info.txt', content: 'AI Talent Acquisition - Leading AI recruitment agency.' },
             ]},
-            { type: 'directory', name: 'Pictures', children: [] },
-            { type: 'directory', name: 'POS', children: [
-                { type: 'directory', name: 'Receipts', children: [] }
-            ]},
+            { type: 'directory', name: 'Candidates', children: [] },
+            { type: 'directory', name: 'Reports', children: [] },
             { type: 'directory', name: 'system', children: [
                 { type: 'file', name: 'users.json', content: usersFileContent },
-                { type: 'file', name: 'maxfra-students.json', content: studentsFileContent },
-                { type: 'file', name: 'maxfra-appointments.json', content: appointmentsFileContent },
-                { type: 'file', name: 'maxfra-check-in-log.json', content: '[]' },
-                { type: 'file', name: 'maxfra-transactions.json', content: '[]' },
-                { type: 'file', name: 'pos-settings.json', content: posSettingsContent },
-                { type: 'file', name: 'pos-inventory.json', content: posInventoryContent },
-                { type: 'file', name: 'pos-sales.json', content: '[]' },
+                { type: 'file', name: 'candidates.json', content: candidatesFileContent },
+                { type: 'file', name: 'interviews.json', content: interviewsFileContent },
+                { type: 'file', name: 'job-openings.json', content: jobOpeningsContent },
+                { type: 'file', name: 'interview-feedback.json', content: '[]' },
+                { type: 'file', name: 'placements.json', content: '[]' },
+                { type: 'file', name: 'company-info.json', content: companyInfoContent },
+                { type: 'file', name: 'communications.json', content: '[]' },
             ]},
-            { type: 'file', name: 'system.config', content: 'Initial system configuration.' },
+            { type: 'file', name: 'system.config', content: 'AI Recruitment Platform - System configuration.' },
         ]
     };
 };
@@ -175,7 +201,7 @@ const App: React.FC = () => {
   const [backgroundId, setBackgroundId] = useState('default');
   const [fs, setFs] = useState<FSNode>(() => {
     try {
-        const savedFs = localStorage.getItem('maxfra-filesystem');
+        const savedFs = localStorage.getItem('ai-recruiter-filesystem');
         if (savedFs) {
             const parsed = JSON.parse(savedFs) as DirectoryNode;
             // Check if the filesystem has the seeded data structure. If so, use it.
@@ -196,13 +222,13 @@ const App: React.FC = () => {
   const zIndexCounter = useRef(10);
 
   useEffect(() => {
-    const savedBg = localStorage.getItem('maxfra-os-background') as keyof typeof BACKGROUNDS | null;
+    const savedBg = localStorage.getItem('ai-recruiter-background') as keyof typeof BACKGROUNDS | null;
     if (savedBg && BACKGROUNDS[savedBg]) {
         setBackgroundId(savedBg);
     }
     
     const handleStorageChange = (e: StorageEvent) => {
-        if (e.key === 'maxfra-os-background' && e.newValue && BACKGROUNDS[e.newValue as keyof typeof BACKGROUNDS]) {
+        if (e.key === 'ai-recruiter-background' && e.newValue && BACKGROUNDS[e.newValue as keyof typeof BACKGROUNDS]) {
             setBackgroundId(e.newValue);
         }
     };
@@ -212,7 +238,7 @@ const App: React.FC = () => {
   
   useEffect(() => {
     try {
-        localStorage.setItem('maxfra-filesystem', JSON.stringify(fs));
+        localStorage.setItem('ai-recruiter-filesystem', JSON.stringify(fs));
     } catch (error) {
         console.error("Failed to save filesystem to localStorage", error);
     }
@@ -317,10 +343,10 @@ const App: React.FC = () => {
         <>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none">
             <div className="flex items-center gap-4">
-                <img src="/logo.svg" alt="Good Talent Logo" className="h-32 w-auto opacity-90" />
+              <img src={logoUrl} alt="Good Talent Logo" className="h-32 w-auto opacity-90" />
             </div>
             <h1 className="text-4xl font-light text-white mt-6 [text-shadow:2px_2px_4px_rgba(0,0,0,0.7)]">
-              Recurier OS 1.0
+              Operating System 0.1 Beta
             </h1>
           </div>
           <Desktop apps={APPS} openApp={openApp} />

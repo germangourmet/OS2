@@ -9,7 +9,7 @@ import {
     ClipCalculatorApp,
     MaxfraOfficeSuiteApp,
     MaxfraLibraryApp,
-    CheckInApp,
+    LiveMeetingApp,
     QuickRepliesApp,
     WhiteboardApp,
     StudentDatabaseApp,
@@ -59,22 +59,67 @@ export const MaxfraLibraryIcon = (className: string = 'w-8 h-8') => (
 );
 // Fix: Removed duplicate WindowControls definition. It exists in components/icons.tsx already.
 
+export const LIBRARY_IMAGES = [
+  { src: new URL('./blog-1-photo-1024x1024.jpg', import.meta.url).href, title: 'Blog Photo 1' },
+  { src: new URL('./buac20-img-rgbcombos.png', import.meta.url).href, title: 'RGB Combos' },
+  { src: new URL('./images.jpeg', import.meta.url).href, title: 'Generic Image' },
+];
+
+export const QUICK_REPLIES_DATA: QuickReplyCategory[] = [
+    {
+      id: 'candidateOutreach',
+      title: 'Candidate Outreach',
+      icon: Icons.NotepadIcon,
+      replies: [
+        {
+          title: 'Initial Contact',
+          message: 'Hi! We came across your profile and think you\'d be a great fit for an exciting AI/ML opportunity. Would you be open to a quick conversation?',
+        },
+        {
+          title: 'Follow-up',
+          message: 'Following up on our previous message. Let me know if you\'re interested in exploring this opportunity.',
+        },
+        {
+          title: 'Interview Scheduling',
+          message: 'Great! Let\'s get you scheduled for an interview. Are you available for a 30-minute call this week?',
+        },
+      ],
+    },
+    {
+      id: 'clientCommunication',
+      title: 'Client Communication',
+      icon: Icons.NotepadIcon,
+      replies: [
+        {
+          title: 'Status Update',
+          message: 'I wanted to update you on the search. We\'ve identified several strong candidates matching your requirements.',
+        },
+        {
+          title: 'Placement Notification',
+          message: 'Excited to inform you that we have a perfect match for your open position.',
+        },
+        {
+          title: 'Reference Check',
+          message: 'We\'re conducting final checks on our top candidate and would like to verify some details with you.',
+        },
+      ],
+    },
+  ];
+
 // App list consumed by the shell (Start menu, Desktop, Taskbar)
 export const APPS: AppConfig[] = [
   { id: 'fileExplorer', title: 'Files', icon: Icons.FolderIcon, component: FileExplorerApp, isPinned: true, defaultSize: { width: 900, height: 640 } },
   { id: 'notepad', title: 'Notepad', icon: Icons.NotepadIcon, component: NotepadApp, isPinned: true },
-  { id: 'candidateDb', title: 'Candidate DB', icon: Icons.StudentDatabaseIcon, component: CandidateDBApp, isPinned: true, defaultSize: { width: 900, height: 600 } },
-  { id: 'jobBoard', title: 'Job Board', icon: Icons.MaxfraOfficeSuiteIcon, component: JobBoardApp },
-  { id: 'scheduler', title: 'Scheduler', icon: Icons.CalendarIcon, component: SchedulerApp },
-  { id: 'messaging', title: 'Messaging', icon: Icons.WhatsAppIcon, component: MessagingApp, defaultSize: { width: 700, height: 520 } },
-  { id: 'studentDatabase', title: 'Students', icon: Icons.StudentDatabaseIcon, component: StudentDatabaseApp },
+  { id: 'candidateDb', title: 'Candidates', icon: Icons.StudentDatabaseIcon, component: CandidateDBApp, isPinned: true, defaultSize: { width: 1000, height: 650 } },
+  { id: 'jobBoard', title: 'Job Openings', icon: Icons.MaxfraOfficeSuiteIcon, component: JobBoardApp, isPinned: true, defaultSize: { width: 1000, height: 650 } },
+  { id: 'clientManagement', title: 'Clients', icon: Icons.StudentDatabaseIcon, component: StudentDatabaseApp },
+  { id: 'scheduler', title: 'Interview Schedule', icon: Icons.CalendarIcon, component: SchedulerApp, defaultSize: { width: 900, height: 600 } },
+  { id: 'messaging', title: 'Messages', icon: Icons.WhatsAppIcon, component: MessagingApp, defaultSize: { width: 700, height: 520 } },
   { id: 'whiteboard', title: 'Whiteboard', icon: Icons.WhiteboardIcon, component: WhiteboardApp },
-  { id: 'quickReplies', title: 'Quick Replies', icon: Icons.GenerateImageIcon, component: QuickRepliesApp },
-  { id: 'checkIn', title: 'Check In', icon: Icons.CheckInIcon, component: CheckInApp },
-  { id: 'pos', title: 'POS', icon: Icons.POSIcon, component: POSApp },
+  { id: 'liveMeeting', title: 'Live Meeting', icon: Icons.CheckInIcon, component: LiveMeetingApp, defaultSize: { width: 1200, height: 700 } },
+  { id: 'quickReplies', title: 'Templates', icon: Icons.GenerateImageIcon, component: QuickRepliesApp },
   { id: 'imageViewer', title: 'Image Viewer', icon: Icons.ImageViewerIcon, component: ImageViewerApp },
   { id: 'aiBrowser', title: 'AI Browser', icon: Icons.BrowserIcon, component: MaxfraAIBrowserApp },
   { id: 'settings', title: 'Settings', icon: Icons.SettingsIcon, component: SettingsApp },
   { id: 'calculator', title: 'Calculator', icon: Icons.CalculatorIcon, component: CalculatorApp },
-  { id: 'calendar', title: 'Calendar', icon: Icons.CalendarIcon, component: CalendarApp },
 ];
