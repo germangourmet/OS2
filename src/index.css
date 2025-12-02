@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --cyan-glow: #00f0ff;
+  --cyan-bright: #00d9ff;
+  --cyan-dark: #0088a3;
+  --magenta-glow: #ff00ff;
+  --magenta-bright: #ff3399;
+  --orange-glow: #ff6b00;
+  --blue-deep: #0a0e27;
+  --blue-darker: #050817;
+  --blue-medium: #141b3d;
+  --blue-light: #1e2749;
+  --neutral-100: #ffffff;
+  --neutral-200: #e5e7eb;
+  --neutral-400: #9ca3af;
+  --neutral-600: #4b5563;
+  --neutral-800: #1f2937;
+  --neutral-900: #111827;
+}
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: linear-gradient(135deg, var(--blue-darker) 0%, var(--blue-deep) 50%, #0d1128 100%);
+  color: var(--neutral-100);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.05) 0%, transparent 50%);
+  animation: rotate 60s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
